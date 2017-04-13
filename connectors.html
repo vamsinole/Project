@@ -144,13 +144,13 @@
             <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
           </div>
           <div class="box3" ng-repeat="topLikers in mydata.overview.top_likers track by topLikers.score">
-            <div class="full-height width-70 pull-left border-right padding-10 p-t-20 p-l-20">
+            <div class="full-height width-65 pull-left border-right padding-10 p-t-20 p-l-20">
               <label class="fs-14 pointer" ng-click="openFbLink(topLikers.url)">{{topLikers.name}}</label><br/>
               <label class="fs-12">Score : {{topLikers.score}}</label>
               <!-- <i ng-if="!negativeComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativeComment.likeId = true" aria-hidden="true"></i>
               <i ng-if="negativeComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativeComment.likeId = false" aria-hidden="true"></i> -->
             </div>
-            <div class="full-height width-30 pull-left padding-10 p-t-20">
+            <div class="full-height width-25 pull-left padding-10 p-t-20">
               <label class="fs-24 width-half pull-left">{{topLikers.percentage}}%</label>
               <i class="fa fa-sort-asc green-color width-half left-top p-l-15" aria-hidden="true"></i>
             </div>
@@ -163,13 +163,13 @@
             <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
           </div>
           <div class="box3" ng-repeat="topDisLikers in mydata.overview.top_dis_likers track by $index">
-            <div class="full-height width-70 pull-left border-right padding-10 p-t-20 p-l-20">
+            <div class="full-height width-65 pull-left border-right padding-10 p-t-20 p-l-20">
               <label class="fs-14 pointer" ng-click="openFbLink(topDisLikers.url)">{{topDisLikers.name}}</label><br/>
               <label class="fs-12">Score : {{topDisLikers.score}}</label>
               <!-- <i ng-if="!negativeComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativeComment.likeId = true" aria-hidden="true"></i>
               <i ng-if="negativeComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativeComment.likeId = false" aria-hidden="true"></i> -->
             </div>
-            <div class="full-height width-30 pull-left padding-10 p-t-20">
+            <div class="full-height width-25 pull-left padding-10 p-t-20">
               <label class="fs-24 width-half pull-left">{{topDisLikers.percentage}}%</label>
               <i class="fa fa-sort-desc red-color width-half right-top p-l-15" aria-hidden="true"></i>
             </div>
