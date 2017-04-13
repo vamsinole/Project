@@ -1,0 +1,193 @@
+<script src="script.js"></script>
+<div ng-app="myApp" ng-controller="MyCtrl" class="box inside-box">
+  <md-tabs class="connectors">
+    <md-tab class="text-uppercase black-text m-b-15" label="Overview">
+      <div class="container-fluid">
+        <div class="row m-t-15 m-b-15">
+          <div class="width-half height-30 pull-left p-l-30">
+            <span><i class="fa fa-facebook-square blue-fb" aria-hidden="true"></i></span><span class="p-l-15">User </span>
+          </div>
+          <div class="width-half height-30 pull-right">
+            <div class="width-25 pull-left">
+              <label class="fs-12">Days</label><br/>
+              <select class="drop-down fs-12 height-30 width-50" ng-model="selected" ng-options="day as day for day in days"></select>
+            </div>
+            <div class="width-25 pull-left">
+              <label class="fs-12">View overview</label><br/>
+              <select class="drop-down fs-12 width-75p height-30 m-l-15" ng-model="selectedSort" ng-options="day as day for day in sorts"></select>
+            </div>
+            <div class="width-25 pull-left">
+              <form class="" action="pdfScript.php" download method="PUT">
+                <!-- <label class="fs-12">Download</label><br/> -->
+                <button class="button">Download</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="width-half m-t-35 pull-left">
+            <label class="width-half fs-14 m-b-15 pull-left p-l-15">Sentiments over time</label>
+            <!-- <label class="width-half pull-left m-b-15 p-l-15"><span> <p class="blue-box m-t-0 m-b-0 pull-left"></p> <span class="p-l-15 pull-left p-r-15">Positive</span> </span><span> <p class="red-box m-t-0 m-b-0 pull-left"></p> <span class="p-l-15 pull-left">Negative</span></span></label> -->
+            <canvas id="line" class="chart chart-line" chart-data="positiveData" chart-labels="positiveLabels" chart-series="series" chart-options="positiveOptions" chart-dataset-override="datasetOverride" chart-colors="colours">
+</canvas>
+          </div>
+          <div class="width-half m-t-35 pull-left">
+            <label class="width-full fs-12 pull-left m-b-15 p-l-30"><span> <p class="blue-box m-t-0 m-b-0 pull-left"></p> <span class="p-l-15 pull-left p-r-15 m-t-2">Positive Sentiments</span> </span><span> <p class="red-box m-t-0 m-b-0 pull-left"></p> <span class="p-l-15 pull-left m-t-2">Negative Sentiments</span></span></label>
+            <canvas id="base" class="chart-horizontal-bar min-height" chart-data="data" chart-labels="labels" chart-colors="colours">
+                  </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="row">
+          <div class="width-half pull-left m-t-15">
+            <div class="full-width m-b-15 p-b-15">
+              <label class="text-uppercase width-80 pull-left fs-14 black-text m-l-30">Top positive posts</label>
+              <i class="fa fa-info-circle green-color width-5 pull-left" uib-tooltip="true" tooltip-enable="true" aria-hidden="true"></i>
+            </div>
+            <div class="box2" target="_blank" ng-repeat="positivePost in mydata.overview.top_pos_posts track by positivePost.percentage">
+              <div class="full-height width-20 pull-left border-right padding-10">
+                <img ng-click="openFbLink(positivePost.permalink_url)" height="65" width="65" class="img-circle m-l-10 pointer" ng-src="{{positivePost.picture}}" alt="">
+                <label class="fs-12 m-l-15">{{dateTransform(positivePost.created_time.date)}}</label>
+              </div>
+              <div class="full-height width-60 pull-left border-right padding-10" ng-init="positivePost.likeId = false">
+                <label ng-click="openFbLink(positivePost.permalink_url)" class="fs-12 pointer">{{positivePost.message}}</label><br/>
+                <i ng-if="!positivePost.likeId" class="fa fa-thumbs-o-up m-t-10 z-999" ng-click="positivePost.likeId = true" aria-hidden="true"></i>
+                <i ng-if="positivePost.likeId" class="fa fa-thumbs-up m-t-10 z-999" ng-click="positivePost.likeId = false" aria-hidden="true"></i>
+              </div>
+              <div class="full-height width-20 pull-left padding-10 p-t-20">
+                <label class="fs-24 width-half pull-left">{{positivePost.percentage}}%</label>
+                <i class="fa fa-sort-asc green-color width-half left-top p-l-15" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+          <div class="width-half pull-left m-t-15">
+            <div class="full-width m-b-15 p-b-15">
+              <label class="text-uppercase fs-14 width-80 pull-left black-text m-l-30">Top negative posts</label>
+              <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
+            </div>
+            <div class="box2" target="_blank" ng-repeat="negativePost in mydata.overview.top_neg_posts track by negativePost.score">
+              <div class="full-height width-20 pull-left border-right padding-10">
+                <img height="65" width="65" class="img-circle m-l-10 pointer" ng-click="openFbLink(negativePost.permalink_url)" ng-src="{{negativePost.picture}}" alt="">
+                <label class="fs-12 m-l-15">{{dateTransform(negativePost.created_time.date)}}</label>
+              </div>
+              <div class="full-height width-60 pull-left border-right padding-10" ng-init="negativePost.likeId = false">
+                <label ng-click="openFbLink(negativePost.permalink_url)" class="fs-12">{{negativePost.message}}</label><br/>
+                <i ng-if="!negativePost.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativePost.likeId = true" aria-hidden="true"></i>
+                <i ng-if="negativePost.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativePost.likeId = false" aria-hidden="true"></i>
+              </div>
+              <div class="full-height width-20 pull-left padding-10 p-t-20">
+                <label class="fs-24 width-half pull-left">{{negativePost.percentage}}%</label>
+                <i class="fa fa-sort-desc red-color width-half right-top p-l-15" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="flex">
+          <div class="width-half pull-left m-t-15">
+            <div class="full-width m-b-15 p-b-15">
+              <label class="text-uppercase width-80 pull-left fs-14 black-text m-l-30">Top positive comments</label>
+              <i class="fa fa-info-circle green-color width-5 pull-left" uib-tooltip="true" tooltip-enable="true" aria-hidden="true"></i>
+            </div>
+            <div class="box2" ng-repeat="positiveComment in mydata.overview.top_pos_comments track by $index">
+              <div class="full-height width-20 pull-left border-right padding-10 p-t-20">
+                <!-- <i class="fa fa-facebook-official" height="50" width="50" aria-hidden="true"></i> -->
+                <label class="text-uppercase fs-14 word-wrap pointer full-width" ng-click="openFbLink(positiveComment.user_info.url)">{{positiveComment.user_info.name}}</label>
+                <!-- <img height="65" width="65" class="img-circle m-l-10" ng-src="{{positiveComment.user_info.url}}" alt=""> -->
+              </div>
+              <div class="full-height width-60 pull-left border-right padding-10" ng-init="positiveComment.likeId = false">
+                <label class="fs-12">{{positiveComment.text}}</label><br/>
+                <i ng-if="!positiveComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="positiveComment.likeId = true" aria-hidden="true"></i>
+                <i ng-if="positiveComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="positiveComment.likeId = false" aria-hidden="true"></i>
+              </div>
+              <div class="full-height width-20 pull-left padding-10 p-t-20">
+                <label class="fs-24 width-half pull-left">{{positiveComment.score * 100}}%</label>
+                <i class="fa fa-sort-asc green-color width-half left-top p-l-15" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+          <div class="width-half pull-left m-t-15">
+            <div class="full-width m-b-15 p-b-15">
+              <label class="text-uppercase fs-14 width-80 pull-left black-text m-l-30">Top negative comments</label>
+              <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
+            </div>
+            <div class="box2" ng-repeat="negativeComment in mydata.overview.top_neg_comments track by $index">
+              <div class="full-height width-20 pull-left border-right padding-10 p-t-20">
+                <!-- <i class="fa fa-facebook-official" height="50" width="50" href="{{negativeComment.user_info.url}}" aria-hidden="true"></i> -->
+                <label class="text-uppercase fs-14 pointer word-wrap full-width" ng-click="openFbLink(negativeComment.user_info.url)">{{negativeComment.user_info.name}}</label>
+                <!-- <img height="50" width="50" class="img-circle m-l-10" ng-src="{{negativeComment.user_info.url}}" alt=""> -->
+              </div>
+              <div class="full-height width-60 pull-left border-right padding-10" ng-init="negativeComment.likeId = false">
+                <label class="fs-12">{{negativeComment.text}}</label><br/>
+                <i ng-if="!negativeComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativeComment.likeId = true" aria-hidden="true"></i>
+                <i ng-if="negativeComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativeComment.likeId = false" aria-hidden="true"></i>
+              </div>
+              <div class="full-height width-20 pull-left padding-10 p-t-20">
+                <label class="fs-24 width-half pull-left">{{negativeComment.score * 100}}%</label>
+                <i class="fa fa-sort-desc red-color width-half right-top p-l-15" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+        <div class="width-half pull-left m-t-15">
+          <div class="full-width m-b-15 p-b-15">
+            <label class="text-uppercase fs-14 width-80 pull-left black-text m-l-30">Top Likers</label>
+            <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
+          </div>
+          <div class="box3" ng-repeat="topLikers in mydata.overview.top_likers track by topLikers.score">
+            <div class="full-height width-70 pull-left border-right padding-10 p-t-20 p-l-20">
+              <label class="fs-14 pointer" ng-click="openFbLink(topLikers.url)">{{topLikers.name}}</label><br/>
+              <label class="fs-12">Score : {{topLikers.score}}</label>
+              <!-- <i ng-if="!negativeComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativeComment.likeId = true" aria-hidden="true"></i>
+              <i ng-if="negativeComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativeComment.likeId = false" aria-hidden="true"></i> -->
+            </div>
+            <div class="full-height width-30 pull-left padding-10 p-t-20">
+              <label class="fs-24 width-half pull-left">{{topLikers.percentage}}%</label>
+              <i class="fa fa-sort-asc green-color width-half left-top p-l-15" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="width-half pull-left m-t-15">
+          <div class="full-width m-b-15 p-b-15">
+            <label class="text-uppercase fs-14 width-80 pull-left black-text m-l-30">Top Dislikers</label>
+            <i class="fa fa-info-circle green-color width-5 pull-left" aria-hidden="true"></i>
+          </div>
+          <div class="box3" ng-repeat="topDisLikers in mydata.overview.top_dis_likers track by $index">
+            <div class="full-height width-70 pull-left border-right padding-10 p-t-20 p-l-20">
+              <label class="fs-14 pointer" ng-click="openFbLink(topDisLikers.url)">{{topDisLikers.name}}</label><br/>
+              <label class="fs-12">Score : {{topDisLikers.score}}</label>
+              <!-- <i ng-if="!negativeComment.likeId" class="fa fa-thumbs-o-up m-t-10" ng-click="negativeComment.likeId = true" aria-hidden="true"></i>
+              <i ng-if="negativeComment.likeId" class="fa fa-thumbs-up m-t-10" ng-click="negativeComment.likeId = false" aria-hidden="true"></i> -->
+            </div>
+            <div class="full-height width-30 pull-left padding-10 p-t-20">
+              <label class="fs-24 width-half pull-left">{{topDisLikers.percentage}}%</label>
+              <i class="fa fa-sort-desc red-color width-half right-top p-l-15" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </md-tab>
+
+    <md-tab class="text-uppercase black-text m-b-15" label="Detailed Analysis">
+      <!-- <p>analysis</p> -->
+    </md-tab>
+  </md-tabs>
+</div>
+
+<script language="javascript" type="text/javascript">
+/* <![CDATA[ */
+ document.write('<a id="pdf-generate" href="http://your-website.com/mpdf/starter/starter.php?url=' + encodeURIComponent(location.href) +'" class="button">');
+ document.write('<img src="http://your-website/images/pdf.jpg" alt="Generate PDF">');
+ document.write('</a>');
+/* ]]> */
+</script>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+  <script data-require="angular.js@1.4.0" data-semver="1.4.0" src="https://code.angularjs.org/1.4.0/angular.js"></script>
+  <script src="hammer.js"></script>
+  <script src="angular-aria.js"></script>
+  <script src="angular-animate.js"></script>
+  <script src="angular-material.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+  <script src="//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="angular-material.css" />
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"> -->
+
+  </script>
+</head>
+
+<body ng-controller="MyCtrl">
+  <div class="fixed blue-color">
+    <div class="header">
+      <ul type="none" class="m-t-0 m-b-0 p-l-25 inline-flex">
+        <li class="m-t-15">
+          <i class="fa fa-bars text-white" aria-hidden="true"></i>
+        </li>
+        <li class="m-l-15">
+          <span class="text-uppercase"><img ng-src="/images/feltso.png" height="50" width="50" alt=""></span>
+        </li>
+        <li class="m-t-15 m-l-15">
+          <span class="text-white">Feltso</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <md-content layout="column" class="m-b-30 m-t-30" flex layout-align="center" layout-fill>
+    <div flex="70" class="content" ui-view>
+      <!-- <md-item ng-repeat="user in users" class="item">
+        <md-item-content class="user tile md-whiteframe-z1" layout="column">
+          <div layout="row" layout-fill class="folded">
+            <div class="md-tile-content">
+              <h3>{{ user.name.first + " " + user.name.last }}</h3>
+            </div>
+          </div>
+          <div layout="column" layout-fill class="expanded">
+            <md-tabs>
+              <md-tab label="1">
+                <span>1</span>
+              </md-tab>
+              <md-tab label="2">
+                <span>2</span>
+              </md-tab>
+              <md-tab label="3">
+                <span>3</span>
+              </md-tab>
+            </md-tabs>
+          </div>
+        </md-item-content>
+      </md-item> -->
+    </div>
+
+    <md-tabs class="index">
+      <md-tab class="text-uppercase" label="Connectors">
+        <div class="m-t-140" ng-include="'connectors.html'">
+        </div>
+      </md-tab>
+      <md-tab class="text-uppercase" label="Know your audience">
+        <div class="m-t-140" ng-include="'audience.html'">
+        </div>
+      </md-tab>
+      <md-tab class="text-uppercase" label="Top search">
+        <div class="m-t-140" ng-include="'search.html'">
+        </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+
+</body>
+
+</html>

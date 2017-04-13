@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^site\.html$ site.php?site_id=$1
